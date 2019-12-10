@@ -1,7 +1,247 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <!--Made by Ben Perlmutter as part of the Odin Project, Dec 7, 2019-->
+  <title>Etch-a-Sketch</title>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+    }
+
+    div{
+      padding: 0;
+      margin: 0;
+
+    }
+
+    body{
+      background-color: #FFF;
+      background-color: #3700A4;
+      background-image: url('pixel-background.png');
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: monospace;
+      font-size: 12px;
+      color: 	#404040;
+    }
+    h1{
+      text-align: center;
+      margin-bottom: .5em;
+      font-size: 3em;
+    }
+    h2{
+      margin-bottom: .3em;
+      margin-top: 1em;
+      font-size: 2em;
+    }
+
+    p{
+      font-size: 20px;
+    }
+
+    button{
+      font-family: monospace;
+      font-size: 1.2em;
+
+      border-radius: 3em;
+      padding: .4em;
+      color: 	#404040;
+
+    }
+    button:focus {
+      outline:0;
+    }
+
+    form{
+      font-size: 1.5em;
+      padding: .2em;
+      padding-left: .5em;
+    }
+    #main{
+      width: 75em;
+      margin: 0 auto;
+      padding-top: 10%;
+
+    }
+    #modifiers{
+      position: relative;
+      float: left;
+      margin-left: 8%;
+      background-color: rgb(255,255,255,.7);
+      padding: 1.2em;
+      border-radius: .8em;
+      margin-top: 8%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    #container{
+      background-color: #FFF;
+      height: 400px;
+      width: 400px;
+      margin:0 auto;
+      margin-right: 8%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      font-size: 0;
+      position: relative;
+      float: right;
+
+    }
+
+    #centerBox{
+      margin:0 auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    #signature{
+      position: absolute;
+      bottom: 0%;
+      left:0%;
+      padding: .5%;
+      border-radius: 0 1em 0 0;
+      color: #808080;
+      background-color: rgb(255,255,255,.7);
+    }
+
+    .clear{
+      clear: both;
+    }
+
+    .box{
+      background-color: white;
+      display: inline-flex;
+
+    }
+  </style>
+
+</head>
+
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+
+  <div id = "main">
+
+    <div id="modifiers">
+
+      <h1>Etch-a-Sketch</h1>
+
+      <button id="clearChanges" onclick="clearChanges()">Clear Changes</button>
+      <button id="numSquares" onclick="changeNumberSquares()">Set Dimensions</button>
+
+      <h2>Change Color</h2>
+      <form id="coloring-form" name="changeColorButtons">
+        <input id="black" type="radio" name="coloring"  onclick="changeBoxColor()">
+            <label for="black"> Black</label><br>
+        <input id="random" type="radio" name="coloring" onclick="changeBoxRandom()">
+            <label for="random"> Random</label><br>
+        <input id="greyscale" type="radio" name="coloring" onclick="changeBoxGreyscale()">
+            <label for="greyscale"> Greyscale</label><br>
+      </form>
+
+    </div>
+
+    <div id="container">
+      <!-- where the etch-a-sketch goes -->
+    </div>
+  </div>
+
+  <div id="signature"><p>Made by <a href="https://github.com/bpmutter">
+      Ben Perlmutter</a> as part of
+      <a href="https://www.theodinproject.com/">The Odin Project</a>.</p>
+  </div>
+
+  <script type="text/javascript">
+    const container = document.querySelector('#container');
+    let numSquares=4;
+
+    //create a single box
+    function createBox(num){
+      const box = document.createElement("div");
+      box.classList.add("box");
+      box.style.width = 100/num+"%";
+      box.style.height = 100/num+"%";
+      container.appendChild(box);
+    }
+
+    //create grid of boxes
+    function createBoxGrid(num){
+
+      for(let i = 0; i<num; i++){
+        for(let j = 0; j<num; j++){
+          createBox(num);
+        }
+      }
+      document.getElementById("black").click(); //selects the right color
+    }
+    //simple change box color
+    function changeBoxColor(){
+      let boxes = document.querySelectorAll(".box");
+      for (const box of boxes){
+        box.addEventListener("mouseover", () =>{
+          box.style.backgroundColor = "black";
+        })
+      }
+    }
+    //change box color to random color
+    function changeBoxRandom(){
+      let boxes = document.querySelectorAll(".box");
+      for (const box of boxes){
+        box.addEventListener("mouseover", () =>{
+          box.style.backgroundColor = '#'+Math.random().toString(16).substr(2,6); //random color generator
+        })
+      }
+    }
+
+    //create box greyscale
+    function changeBoxGreyscale(){
+      let boxes = document.querySelectorAll(".box");
+      for (const box of boxes){
+      let boxShading = 0;
+        box.addEventListener("mouseover", () =>{
+              boxShading += .1;
+              box.style.backgroundColor = "rgb(0,0,0,"+ boxShading +")";
+
+
+
+        });
+      }
+    }
+
+    createBoxGrid(numSquares);
+
+
+    function clearChanges(){
+      const boxes = document.querySelectorAll(".box");
+      boxes.forEach(box => {
+        box.style.backgroundColor = "white";
+      })
+      //sebastian's version (doesn't work ATM)
+      // boxes = boxes.map(box => {
+      //   box.style.backgroundColor = "white";
+      //   return box
+      //})
+    }
+
+
+
+    //need to fix this
+    function changeNumberSquares(){
+      const gridSize = Number(prompt("How many squares per side? (between 1 and 100 pls)"));
+
+      if(gridSize == "") return; //for when they don't enter value
+      else if(gridSize <=0 || gridSize>100 || !gridSize){ //for bad values
+        return alert("please choose a number between 1 and 100!");
+      }
+      else{
+      document.getElementById("container").innerHTML = ""; //clear inner html
+      createBoxGrid(gridSize);
+      }
+
+    }
+
+
+
+  </script>
+
 </body>
 </html>
