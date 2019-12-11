@@ -153,7 +153,7 @@
   <script type="text/javascript">
     const container = document.querySelector('#container');
     let numSquares=4;
-    let boxShading = 0; //used in the greyscale and clear functions
+
 
     //create a single box
     function createBox(num){
@@ -196,8 +196,11 @@
     //create box greyscale
     function changeBoxGreyscale(){
       let boxes = document.querySelectorAll(".box");
-      boxShading = 0;
+      for(const box of boxes){
+        box.style.backgroundColor = "rgb(255,255,255,1)";
+      }
       for (const box of boxes){
+        let boxShading = 0;
         box.addEventListener("mouseover", () =>{
               boxShading += .1;
               box.style.backgroundColor = "rgb(0,0,0,"+ boxShading +")";
@@ -215,8 +218,10 @@
       const boxes = document.querySelectorAll(".box");
       boxes.forEach(box => {
         box.style.backgroundColor = "rgb(255,255,255,1)";
-        boxShading = 0;
+
       })
+      document.getElementById("container").innerHTML = ""; //clear inner html
+      createBoxGrid(numSquares);
       //sebastian's version (doesn't work ATM)
       // boxes = boxes.map(box => {
       //   box.style.backgroundColor = "white";
@@ -225,8 +230,6 @@
     }
 
 
-
-    //need to fix this
     function changeNumberSquares(){
       const gridSize = Number(prompt("How many squares per side? (between 1 and 100 pls)"));
 
@@ -235,10 +238,9 @@
         return alert("please choose a number between 1 and 100!");
       }
       else{
-      document.getElementById("container").innerHTML = ""; //clear inner html
-      createBoxGrid(gridSize);
+        document.getElementById("container").innerHTML = ""; //clear inner html
+        createBoxGrid(gridSize);
       }
-
     }
 
 
