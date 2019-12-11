@@ -109,7 +109,7 @@
     }
 
     .box{
-      background-color: white;
+      background-color: rgb(255,255,255,1);
       display: inline-flex;
 
     }
@@ -153,6 +153,7 @@
   <script type="text/javascript">
     const container = document.querySelector('#container');
     let numSquares=4;
+    let boxShading = 0; //used in the greyscale and clear functions
 
     //create a single box
     function createBox(num){
@@ -171,7 +172,7 @@
           createBox(num);
         }
       }
-      document.getElementById("black").click(); //selects the right color
+      document.getElementById("black").click(); //selects the right default color
     }
     //simple change box color
     function changeBoxColor(){
@@ -195,8 +196,8 @@
     //create box greyscale
     function changeBoxGreyscale(){
       let boxes = document.querySelectorAll(".box");
+      boxShading = 0;
       for (const box of boxes){
-      let boxShading = 0;
         box.addEventListener("mouseover", () =>{
               boxShading += .1;
               box.style.backgroundColor = "rgb(0,0,0,"+ boxShading +")";
@@ -213,7 +214,8 @@
     function clearChanges(){
       const boxes = document.querySelectorAll(".box");
       boxes.forEach(box => {
-        box.style.backgroundColor = "white";
+        box.style.backgroundColor = "rgb(255,255,255,1)";
+        boxShading = 0;
       })
       //sebastian's version (doesn't work ATM)
       // boxes = boxes.map(box => {
